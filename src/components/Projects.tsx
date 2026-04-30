@@ -241,16 +241,19 @@ function DeviceMockup({
   return <CrossMockup accent={accent} />;
 }
 
-/** Rung-specific mockup: iPhone + iPad + Mac, all running the same app.
- *  Replace RungIcon with a real <Image src="/projects/rung-icon.png"> when
- *  you drop the actual icon file in. */
+/** Rung-specific mockup: iPhone + iPad + Mac, each showing the app icon
+ *  filling most of the screen — like the Rung launch screen on every Apple
+ *  device. The cross-platform story made visual. */
 function RungTrioMockup({ accent }: { accent: string }) {
+  // Tinted launch backdrop — soft warm gradient that matches the icon
+  const launchBg = `radial-gradient(circle at 50% 40%, ${accent}33 0%, ${accent}11 70%, transparent 100%)`;
+
   return (
     <div className="absolute inset-0 flex items-center justify-center">
-      {/* Mac in the back */}
-      <div className="absolute top-[18%] left-1/2 w-[60%] -translate-x-1/2">
+      {/* Mac in the back, centered */}
+      <div className="absolute top-[14%] left-1/2 w-[62%] -translate-x-1/2">
         <div
-          className="rounded-t-xl border border-ink/15 bg-white shadow-2xl"
+          className="overflow-hidden rounded-t-xl border border-ink/15 bg-white shadow-2xl"
           style={{ boxShadow: `0 30px 70px -25px ${accent}88` }}
         >
           <div className="flex items-center gap-1 border-b border-ink/10 px-2 py-1.5">
@@ -258,92 +261,65 @@ function RungTrioMockup({ accent }: { accent: string }) {
             <span className="size-1.5 rounded-full bg-[#febc2e]" />
             <span className="size-1.5 rounded-full bg-[#28c840]" />
           </div>
-          <RungAppUI accent={accent} columns={3} />
+          <RungLaunchScreen background={launchBg} iconScale={0.42} />
         </div>
         {/* MacBook base hint */}
         <div className="mx-auto h-1.5 w-[110%] -translate-x-[5%] rounded-b-md bg-ink/85" />
       </div>
 
-      {/* iPad to the left, slightly tilted */}
+      {/* iPad on the left, slightly tilted */}
       <div
-        className="absolute bottom-[8%] left-[6%] w-[28%] -rotate-6"
+        className="absolute bottom-[8%] left-[5%] w-[28%] -rotate-6"
         style={{ filter: `drop-shadow(0 18px 40px ${accent}aa)` }}
       >
-        <div className="rounded-xl border-[3px] border-ink/85 bg-white p-1">
-          <RungAppUI accent={accent} columns={2} compact />
+        <div className="overflow-hidden rounded-xl border-[3px] border-ink/85 bg-white">
+          <RungLaunchScreen background={launchBg} iconScale={0.5} />
         </div>
       </div>
 
-      {/* iPhone to the right, tilted the other way */}
+      {/* iPhone on the right, tilted the other way */}
       <div
-        className="absolute bottom-[6%] right-[6%] w-[18%] rotate-6"
+        className="absolute bottom-[6%] right-[5%] w-[18%] rotate-6"
         style={{ filter: `drop-shadow(0 18px 40px ${accent}aa)` }}
       >
-        <div className="rounded-2xl border-[3px] border-ink/85 bg-white p-1">
-          <div className="mx-auto h-1 w-6 rounded-full bg-ink/85" />
-          <RungAppUI accent={accent} columns={1} compact />
+        <div className="overflow-hidden rounded-2xl border-[3px] border-ink/85 bg-white">
+          {/* Phone notch */}
+          <div className="flex justify-center bg-white py-1">
+            <span className="h-1 w-6 rounded-full bg-ink/85" />
+          </div>
+          <RungLaunchScreen background={launchBg} iconScale={0.55} />
         </div>
       </div>
     </div>
   );
 }
 
-/** Tiny Rung UI: app icon + a few "habit" rows. Same on every device.
- *  Real Rung icon: drop public/projects/rung-icon.png and swap RungIcon below. */
-function RungAppUI({
-  accent,
-  columns,
-  compact = false,
+/** A "launch screen" — full-bleed tint with the Rung icon centered. */
+function RungLaunchScreen({
+  background,
+  iconScale,
 }: {
-  accent: string;
-  columns: number;
-  compact?: boolean;
+  background: string;
+  iconScale: number;
 }) {
-  const rows = compact ? 3 : 4;
   return (
     <div
-      className="flex flex-col"
-      style={{
-        gap: compact ? 4 : 6,
-        padding: compact ? 6 : 12,
-      }}
+      className="relative flex aspect-[4/3] items-center justify-center"
+      style={{ background }}
     >
-      <div className="flex items-center gap-2">
-        <RungIcon size={compact ? 14 : 22} />
-        <div
-          className="h-2 flex-1 rounded-full"
-          style={{ backgroundColor: `${accent}33` }}
+      <div
+        className="relative"
+        style={{ width: `${iconScale * 100}%`, aspectRatio: "1 / 1" }}
+      >
+        <Image
+          src="/projects/rung-icon.png"
+          alt=""
+          fill
+          sizes="(max-width: 768px) 30vw, 200px"
+          className="rounded-[22%] object-contain shadow-[0_8px_24px_-8px_rgba(0,0,0,0.45)]"
         />
       </div>
-      <div
-        className="grid gap-1 pt-1"
-        style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
-      >
-        {Array.from({ length: rows * columns }).map((_, i) => (
-          <div
-            key={i}
-            className="rounded"
-            style={{
-              height: compact ? 12 : 20,
-              backgroundColor: i % 3 === 0 ? `${accent}55` : `${accent}22`,
-            }}
-          />
-        ))}
-      </div>
     </div>
-  );
-}
-
-/** Real Rung app icon copied from the macOS app's Assets.xcassets. */
-function RungIcon({ size }: { size: number }) {
-  return (
-    <Image
-      src="/projects/rung-icon.png"
-      alt=""
-      width={size}
-      height={size}
-      className="shrink-0 rounded-[22%] shadow-[0_2px_6px_-2px_rgba(0,0,0,0.4)]"
-    />
   );
 }
 

@@ -52,11 +52,12 @@ export default function Hero() {
           className="relative flex min-h-[80vh] items-center justify-center lg:min-h-[84vh]"
         >
           {/* "Hey," — fully behind portrait initially, slides left on reveal.
-              Sized to fit the left third of the viewport without overflowing. */}
+              Anchored slightly inset from the left edge so it ends up close
+              to the body, not pinned to the screen edge. */}
           <motion.span
             style={{ x: heyDrift }}
             aria-hidden={!revealed}
-            className="pointer-events-none absolute left-0 top-[42%] z-0 -translate-y-1/2 select-none whitespace-nowrap font-serif italic leading-[0.85] text-ink text-[clamp(50px,8vw,140px)]"
+            className="pointer-events-none absolute left-[6%] top-[42%] z-0 -translate-y-1/2 select-none whitespace-nowrap font-serif italic leading-[0.85] text-ink text-[clamp(60px,11vw,180px)]"
           >
             <motion.span
               initial={{ x: "150%", opacity: 0 }}
@@ -72,7 +73,7 @@ export default function Hero() {
           <motion.span
             style={{ x: thereDrift }}
             aria-hidden={!revealed}
-            className="pointer-events-none absolute right-0 top-[58%] z-0 -translate-y-1/2 select-none whitespace-nowrap font-serif italic leading-[0.85] text-ink text-[clamp(50px,8vw,140px)]"
+            className="pointer-events-none absolute right-[6%] top-[58%] z-0 -translate-y-1/2 select-none whitespace-nowrap font-serif italic leading-[0.85] text-ink text-[clamp(60px,11vw,180px)]"
           >
             <motion.span
               initial={{ x: "-150%", opacity: 0 }}
@@ -113,36 +114,28 @@ export default function Hero() {
               <AvailabilityPill />
             </motion.div>
 
-            {/* Description callout — sits above the turban with a curved arrow
-                that comes from the callout and points down at the turban. */}
+            {/* Description callout — to the RIGHT of the turban, safely below
+                the nav. A dashed curve runs from the callout to the turban. */}
             <motion.div
               initial={{ opacity: 0, x: 16 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.95, ease }}
-              className="absolute -right-[14%] -top-[10%] z-20 hidden lg:block"
+              className="absolute -right-[16%] top-[6%] z-20 hidden lg:block"
             >
-              {/* Arrow: starts at the bottom-left of the callout, curves down
-                  and to the LEFT, ending with the arrowhead at the turban. */}
+              {/* Dashed curve from the callout's bottom-left, sweeping
+                  left and slightly down toward the turban. No arrowhead. */}
               <svg
                 aria-hidden
-                viewBox="0 0 180 130"
-                className="absolute -left-[140px] top-[60px] h-[130px] w-[180px] text-ink/50"
+                viewBox="0 0 180 80"
+                className="absolute -left-[150px] top-[58px] h-[80px] w-[180px] text-ink/45"
                 fill="none"
               >
                 <path
-                  d="M 175 12 C 130 6, 70 30, 24 100"
+                  d="M 175 8 C 120 6, 70 22, 14 64"
                   stroke="currentColor"
                   strokeWidth="1.5"
                   strokeLinecap="round"
-                  strokeDasharray="2 4"
-                />
-                {/* Arrowhead at (24, 100) pointing down-left */}
-                <path
-                  d="M 36 90 L 22 104 L 38 110"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  strokeDasharray="2 5"
                 />
               </svg>
               <p className="max-w-[240px] rounded-2xl border border-white/45 bg-white/40 px-4 py-3 text-left text-[13px] leading-relaxed text-ink/85 shadow-[0_10px_28px_-10px_rgba(20,17,14,0.25),inset_0_1px_0_rgba(255,255,255,0.6)] backdrop-blur-xl backdrop-saturate-150 dark:border-white/12 dark:bg-white/[0.05] dark:shadow-[0_10px_28px_-10px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.08)]">

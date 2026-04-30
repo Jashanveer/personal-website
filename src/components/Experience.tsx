@@ -49,16 +49,46 @@ export default function Experience() {
       <div className="mx-auto max-w-[1500px]">
         <SectionHeading eyebrow="Track record" title="Experience & Skills" />
 
-        <div className="mt-16">
+        {/* Timeline — vertical dashed line down the left side; each entry's
+            circle marker sits on the line. The line draws in as you scroll. */}
+        <div className="relative mt-16 pl-8 md:pl-12">
+          {/* Static line (full height) — sits behind the markers */}
+          <div
+            aria-hidden
+            className="absolute bottom-2 left-2 top-2 w-px bg-ink/15 md:left-3"
+          />
+          {/* Animated overlay line — grows from top to bottom as section scrolls in */}
+          <motion.div
+            aria-hidden
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true, margin: "-15%" }}
+            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+            style={{ originY: 0 }}
+            className="absolute bottom-2 left-2 top-2 w-px origin-top bg-ink md:left-3"
+          />
+
           {rows.map((r, i) => (
             <motion.div
               key={r.years}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: 12 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 0.5, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-              className="grid grid-cols-1 gap-2 border-t border-ink/15 py-8 md:grid-cols-[180px_1fr_auto] md:items-center md:gap-8"
+              transition={{ duration: 0.5, delay: 0.15 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="relative grid grid-cols-1 gap-2 py-8 first:pt-0 last:pb-0 md:grid-cols-[180px_1fr_auto] md:items-center md:gap-8"
             >
+              {/* Marker dot — sits on the line. The outer ring is the
+                  "current" highlight; only the first row gets the pulse. */}
+              <span
+                aria-hidden
+                className="absolute -left-[26px] top-9 z-10 inline-flex size-3.5 items-center justify-center md:-left-[34px]"
+              >
+                {i === 0 ? (
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-ink/30" />
+                ) : null}
+                <span className="relative inline-flex size-3 rounded-full border-2 border-cream bg-ink shadow-[0_0_0_1px_rgba(20,17,14,0.15)]" />
+              </span>
+
               <span className="font-sans text-[13px] font-medium tracking-tight text-ink/55">
                 {r.years}
               </span>
