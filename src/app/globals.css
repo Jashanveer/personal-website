@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+/* Manual dark mode controlled by data-theme="dark" on <html>.
+   prefers-color-scheme is read once on first load by ThemeScript. */
+@variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  /* Light palette — neutral cream + lavender lilac that complements the
+     lavender turban + black polo. Less warm/orange than v1. */
+  --color-cream: #f6f1ea;
+  --color-cream-deep: #ece3d6;
+  --color-peach: #e6d2d8;
+  --color-peach-deep: #d4b4c0;
+  --color-lilac-mist: #d8c4e4;
+  --color-ink: #0a0a0a;
+  --color-ink-soft: #2a2520;
+
+  /* fonts: next/font sets --font-*-loaded on <html>; we alias for utilities */
+  --font-sans: var(--font-sans-loaded), system-ui, sans-serif;
+  --font-serif: var(--font-serif-loaded), "Times New Roman", serif;
+  --font-display: var(--font-display-loaded), "Arial Black", sans-serif;
+}
+
+@layer base {
+  /* Dark palette — warm cocoa with lilac/plum accents matching the turban. */
+  html[data-theme="dark"] {
+    --color-cream: #14110e;
+    --color-cream-deep: #1c1714;
+    --color-peach: #3a2a35;
+    --color-peach-deep: #4a3045;
+    --color-lilac-mist: #322232;
+    --color-ink: #f5e8d0;
+    --color-ink-soft: #c9b598;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+
+  body {
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+
+  ::selection {
+    background-color: var(--color-ink);
+    color: var(--color-cream);
+  }
+}
