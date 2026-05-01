@@ -25,14 +25,14 @@ const rows: Row[] = [
   },
   {
     years: "2023",
-    role: "Software Engineer L2 · PIMCO Consultant",
-    org: "Gemini Solutions",
+    role: "Software Engineer L2",
+    org: "Gemini Solutions · PIMCO Consultant",
     tags: ["Java", "Spring", "Oracle", "Legacy modernization", "30+ PRs/mo"],
   },
   {
     years: "2022 – 2023",
-    role: "Software Engineer L1 · Clovek Wealth",
-    org: "Gemini Solutions",
+    role: "Software Engineer L1",
+    org: "Gemini Solutions · Clovek Wealth",
     tags: ["Angular", "REST/SOAP", "SQL", "+40% response time"],
   },
   {
@@ -55,7 +55,7 @@ export default function Experience() {
           {/* Static line (full height) — sits behind the markers */}
           <div
             aria-hidden
-            className="absolute bottom-2 left-2 top-2 w-px bg-ink/15 md:left-3"
+            className="absolute bottom-2 left-3 top-2 w-px bg-ink/15 md:left-5"
           />
           {/* Animated overlay line — grows from top to bottom as section scrolls in */}
           <motion.div
@@ -65,16 +65,20 @@ export default function Experience() {
             viewport={{ once: true, margin: "-15%" }}
             transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
             style={{ originY: 0 }}
-            className="absolute bottom-2 left-2 top-2 w-px origin-top bg-ink md:left-3"
+            className="absolute bottom-2 left-3 top-2 w-px origin-top bg-ink md:left-5"
           />
 
           {rows.map((r, i) => (
             <motion.div
               key={r.years}
-              initial={{ opacity: 0, x: 12 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 0.5, delay: 0.15 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              initial={{ opacity: 0, x: 24, y: 24, filter: "blur(8px)" }}
+              whileInView={{ opacity: 1, x: 0, y: 0, filter: "blur(0px)" }}
+              viewport={{ once: true, margin: "-15%" }}
+              transition={{
+                duration: 0.9,
+                delay: 0.15 + i * 0.1,
+                ease: [0.16, 1, 0.3, 1],
+              }}
               className="relative grid grid-cols-1 gap-2 py-8 first:pt-0 last:pb-0 md:grid-cols-[180px_1fr_auto] md:items-center md:gap-8"
             >
               {/* Marker dot — sits on the line. The outer ring is the

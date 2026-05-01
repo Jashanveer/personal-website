@@ -50,3 +50,28 @@
     color: var(--color-cream);
   }
 }
+
+/* GitHub heatmap scroll-reveal. Each colored cell carries its own
+   --threshold (column position 0..1). The parent SVG carries --gh-reveal,
+   updated via Framer Motion as the card scrolls into view. The cell's
+   opacity ramps from 0 to 1 once --gh-reveal crosses the threshold,
+   giving a left-to-right wave fill. */
+.gh-reveal-cell {
+  /* Distance from the wave front: negative = not yet reached, positive = past. */
+  --d: calc(var(--gh-reveal, 0) - var(--threshold, 0));
+  /* rise: 0 → 1 as the wave reaches this cell (0.05 of progress). */
+  --rise: clamp(0, calc((var(--d) + 0.05) * 20), 1);
+  /* fall: 0 → 1 over the next 0.1 of progress, settling the pop. */
+  --fall: clamp(0, calc(var(--d) * 10), 1);
+  opacity: var(--rise);
+  transform: scale(calc(var(--rise) * (1.3 - 0.3 * var(--fall))));
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gh-reveal-cell {
+    opacity: 1;
+    transform: none;
+  }
+}

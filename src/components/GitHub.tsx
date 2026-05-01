@@ -64,10 +64,10 @@ export default function GitHubSection() {
             ghchart.rshah.org. Wrapped in a glass card so it sits on the
             ambient gradient instead of a hard white block. */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, y: 60, scale: 0.96, filter: "blur(10px)" }}
+          whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+          viewport={{ once: true, margin: "-15%" }}
+          transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
           className="mt-16 overflow-hidden rounded-3xl border border-white/40 bg-white/35 p-6 shadow-[0_20px_50px_-25px_rgba(20,17,14,0.35),inset_0_1px_0_rgba(255,255,255,0.6)] backdrop-blur-2xl backdrop-saturate-150 lg:p-10 dark:border-white/10 dark:bg-white/[0.04] dark:shadow-[0_20px_50px_-25px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.08)]"
         >
           <div className="flex flex-col gap-2 pb-6">
@@ -93,10 +93,14 @@ export default function GitHubSection() {
           {repos.map((r, i) => (
             <motion.div
               key={r.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 0.5, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+              initial={{ opacity: 0, y: 40, scale: 0.96, filter: "blur(8px)" }}
+              whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+              viewport={{ once: true, margin: "-15%" }}
+              transition={{
+                duration: 0.9,
+                delay: i * 0.07,
+                ease: [0.16, 1, 0.3, 1],
+              }}
             >
               <Link
                 href={r.href}

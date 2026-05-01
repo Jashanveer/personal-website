@@ -109,17 +109,18 @@ function MagneticEmail() {
   );
 }
 
-/** Quick contact form. On submit, opens the user's mail client with a
- *  pre-filled message via mailto:. No backend needed. To wire this to a real
- *  backend later (Resend, Formspree, an API route), replace the onSubmit
- *  handler with a fetch to that endpoint. */
+type Status = "idle" | "sending" | "sent" | "error";
+
+/** Contact form that POSTs to /api/contact (Resend-backed). Falls back to
+ *  mailto: if the backend is unconfigured (no RESEND_API_KEY). */
 function ContactForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<Status>("idle");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const openMailtoFallback = () => {
     const subject = encodeURIComponent(
       `Portfolio inquiry${name ? ` from ${name}` : ""}`,
     );
@@ -136,6 +137,44 @@ function ContactForm() {
     window.location.href = `mailto:${RECIPIENT}?subject=${subject}&body=${body}`;
   };
 
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (status === "sending") return;
+    setStatus("sending");
+    setErrorMsg(null);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+      const data: { ok?: boolean; error?: string; code?: string } = await res
+        .json()
+        .catch(() => ({}));
+
+      if (res.ok && data.ok) {
+        setStatus("sent");
+        setName("");
+        setEmail("");
+        setMessage("");
+        return;
+      }
+
+      // Backend not configured — fall back to mailto and tell the user
+      if (data.code === "NO_BACKEND") {
+        openMailtoFallback();
+        setStatus("idle");
+        return;
+      }
+
+      setStatus("error");
+      setErrorMsg(data.error ?? "Something went wrong. Try emailing directly.");
+    } catch {
+      setStatus("error");
+      setErrorMsg("Network error. Try emailing directly.");
+    }
+  };
+
   return (
     <form
       onSubmit={onSubmit}
@@ -147,6 +186,7 @@ function ContactForm() {
         value={name}
         onChange={setName}
         autoComplete="name"
+        disabled={status === "sending"}
       />
       <Field
         label="Your email"
@@ -155,6 +195,7 @@ function ContactForm() {
         onChange={setEmail}
         autoComplete="email"
         required
+        disabled={status === "sending"}
       />
       <label className="flex flex-col gap-1.5 sm:col-span-2">
         <span className="font-sans text-[11px] font-medium uppercase tracking-[0.18em] text-ink/55">
@@ -164,20 +205,32 @@ function ContactForm() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           required
+          disabled={status === "sending"}
           rows={4}
           placeholder="Tell me about your project, role, or idea…"
-          className="resize-none rounded-xl border border-ink/15 bg-white/70 px-3 py-2.5 font-sans text-[14px] text-ink placeholder:text-ink/40 focus:border-ink/40 focus:outline-none focus:ring-2 focus:ring-ink/15 dark:border-white/10 dark:bg-white/[0.06] dark:text-ink dark:placeholder:text-ink/40"
+          className="resize-none rounded-xl border border-ink/15 bg-white/70 px-3 py-2.5 font-sans text-[14px] text-ink placeholder:text-ink/40 focus:border-ink/40 focus:outline-none focus:ring-2 focus:ring-ink/15 disabled:opacity-60 dark:border-white/10 dark:bg-white/[0.06] dark:text-ink dark:placeholder:text-ink/40"
         />
       </label>
       <div className="flex items-center justify-between gap-3 pt-1 sm:col-span-2">
-        <span className="font-sans text-[12px] text-ink/50">
-          Submitting opens your mail app with the message pre-filled.
+        <span className="font-sans text-[12px] text-ink/55" aria-live="polite">
+          {status === "sent"
+            ? "Sent — I'll get back to you soon."
+            : status === "error"
+              ? errorMsg
+              : status === "sending"
+                ? "Sending…"
+                : "I'll reply within a couple of days."}
         </span>
         <button
           type="submit"
-          className="group inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 font-sans text-[13px] font-medium text-cream shadow-[0_10px_25px_-10px_rgba(20,17,14,0.5)] transition-transform hover:scale-[0.97]"
+          disabled={status === "sending" || status === "sent"}
+          className="group inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 font-sans text-[13px] font-medium text-cream shadow-[0_10px_25px_-10px_rgba(20,17,14,0.5)] transition-transform hover:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
         >
-          Send message
+          {status === "sent"
+            ? "Sent"
+            : status === "sending"
+              ? "Sending…"
+              : "Send message"}
           <Send
             className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
             strokeWidth={2}
@@ -196,6 +249,7 @@ function Field({
   onChange,
   autoComplete,
   required,
+  disabled,
 }: {
   label: string;
   type: "text" | "email";
@@ -203,6 +257,7 @@ function Field({
   onChange: (v: string) => void;
   autoComplete?: string;
   required?: boolean;
+  disabled?: boolean;
 }) {
   return (
     <label className="flex flex-col gap-1.5">
@@ -215,7 +270,8 @@ function Field({
         onChange={(e) => onChange(e.target.value)}
         required={required}
         autoComplete={autoComplete}
-        className="rounded-xl border border-ink/15 bg-white/70 px-3 py-2.5 font-sans text-[14px] text-ink placeholder:text-ink/40 focus:border-ink/40 focus:outline-none focus:ring-2 focus:ring-ink/15 dark:border-white/10 dark:bg-white/[0.06] dark:text-ink dark:placeholder:text-ink/40"
+        disabled={disabled}
+        className="rounded-xl border border-ink/15 bg-white/70 px-3 py-2.5 font-sans text-[14px] text-ink placeholder:text-ink/40 focus:border-ink/40 focus:outline-none focus:ring-2 focus:ring-ink/15 disabled:opacity-60 dark:border-white/10 dark:bg-white/[0.06] dark:text-ink dark:placeholder:text-ink/40"
       />
     </label>
   );

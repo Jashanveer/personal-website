@@ -35,16 +35,21 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   // Liquid Glass surface: backdrop blur + saturate, inner top highlight,
   // soft outer shadow that deepens on hover.
   const glassClass =
-    "group relative block overflow-hidden rounded-3xl border border-white/40 bg-white/30 backdrop-blur-2xl backdrop-saturate-150 shadow-[0_20px_60px_-30px_rgba(20,17,14,0.45),inset_0_1px_0_rgba(255,255,255,0.6)] transition-all duration-500 ease-out hover:-translate-y-1.5 hover:bg-white/40 hover:shadow-[0_40px_90px_-30px_rgba(20,17,14,0.55),inset_0_1px_0_rgba(255,255,255,0.7)] dark:border-white/10 dark:bg-white/[0.04] dark:shadow-[0_20px_60px_-30px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.08)] dark:hover:bg-white/[0.06]";
+    "group relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/40 bg-white/30 backdrop-blur-2xl backdrop-saturate-150 shadow-[0_20px_60px_-30px_rgba(20,17,14,0.45),inset_0_1px_0_rgba(255,255,255,0.6)] transition-all duration-500 ease-out hover:-translate-y-1.5 hover:bg-white/40 hover:shadow-[0_40px_90px_-30px_rgba(20,17,14,0.55),inset_0_1px_0_rgba(255,255,255,0.7)] dark:border-white/10 dark:bg-white/[0.04] dark:shadow-[0_20px_60px_-30px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.08)] dark:hover:bg-white/[0.06]";
 
   const inner = <ProjectCardInner project={project} />;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-10%" }}
-      transition={{ duration: 0.8, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ opacity: 0, y: 80, scale: 0.94, filter: "blur(12px)" }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-15%" }}
+      transition={{
+        duration: 1.1,
+        delay: index * 0.12,
+        ease: [0.16, 1, 0.3, 1],
+      }}
+      className="h-full"
     >
       {project.href ? (
         <Link
@@ -110,7 +115,7 @@ function ProjectCardInner({ project }: { project: Project }) {
         </div>
       </div>
 
-      <div className="flex items-start justify-between gap-6 px-6 py-6 lg:px-8 lg:py-8">
+      <div className="flex flex-1 items-start justify-between gap-6 px-6 py-6 lg:px-8 lg:py-8">
         <div className="flex flex-col gap-2">
           <h3 className="font-display text-2xl uppercase tracking-tight text-ink lg:text-3xl">
             {project.name}

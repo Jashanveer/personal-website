@@ -10,20 +10,25 @@ const ease = [0.16, 1, 0.3, 1] as const;
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const [revealed, setRevealed] = useState(false);
+  const [hoverable, setHoverable] = useState(true);
   const prefersReducedMotion = useReducedMotion();
 
-  // Auto-reveal on touch devices (no hover) and after a brief delay so the
-  // animation gets seen even if the user never hovers.
+  // On hover-capable devices (desktop with mouse), Hey/there are strictly
+  // hover-driven — they show on pointer-enter and hide on pointer-leave.
+  // On touch devices (no hover), they auto-reveal once so the headline is
+  // still visible. Reduced-motion users always see them.
   useEffect(() => {
-    if (revealed) return;
     if (prefersReducedMotion) {
       setRevealed(true);
       return;
     }
-    const isTouch = window.matchMedia("(hover: none)").matches;
-    const t = setTimeout(() => setRevealed(true), isTouch ? 600 : 2200);
-    return () => clearTimeout(t);
-  }, [revealed, prefersReducedMotion]);
+    const canHover = window.matchMedia("(hover: hover)").matches;
+    setHoverable(canHover);
+    if (!canHover) {
+      const t = setTimeout(() => setRevealed(true), 600);
+      return () => clearTimeout(t);
+    }
+  }, [prefersReducedMotion]);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -34,7 +39,11 @@ export default function Hero() {
   const portraitY = useTransform(scrollYProgress, [0, 1], [0, -50]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
 
-  const handleReveal = () => setRevealed(true);
+  // First hover over the image is the "introduction" — once Hey/there have
+  // arrived they stay; we don't undo on pointer-leave.
+  const onEnter = () => {
+    if (hoverable) setRevealed(true);
+  };
 
   return (
     <section
@@ -47,8 +56,6 @@ export default function Hero() {
         className="relative mx-auto max-w-[1600px] px-6 lg:px-10"
       >
         <div
-          onPointerEnter={handleReveal}
-          onPointerDown={handleReveal}
           className="relative flex min-h-[80vh] items-center justify-center lg:min-h-[84vh]"
         >
           {/* "Hey," — fully behind portrait initially, slides left on reveal.
@@ -94,15 +101,22 @@ export default function Hero() {
             style={{ y: portraitY }}
             className="relative z-10 aspect-[3/4] w-[min(72vw,640px)]"
           >
-            <Image
-              src="/me.webp"
-              alt="Jashanveer Singh"
-              fill
-              priority
-              sizes="(max-width: 1024px) 72vw, 640px"
-              quality={92}
-              className="object-contain object-bottom drop-shadow-[0_30px_60px_rgba(20,17,14,0.18)] dark:drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
-            />
+            {/* Hover handlers live on the image wrapper only — pill and callout
+                are siblings outside this div so they don't trigger reveal. */}
+            <div
+              onPointerEnter={onEnter}
+              className="relative h-full w-full"
+            >
+              <Image
+                src="/me.webp"
+                alt="Jashanveer Singh"
+                fill
+                priority
+                sizes="(max-width: 1024px) 72vw, 640px"
+                quality={92}
+                className="object-contain object-bottom drop-shadow-[0_30px_60px_rgba(20,17,14,0.18)] dark:drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
+              />
+            </div>
 
             {/* Availability pill — tucked close to the left of the head */}
             <motion.div
@@ -153,19 +167,20 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* BOTTOM ROW — "I AM JASHANVEER" + "SOFTWARE ENGINEER" */}
+        {/* BOTTOM ROW — "I AM JASHANVEER" + "SOFTWARE ENGINEER".
+            Stacks vertically on mobile so the headline doesn't overflow. */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.5, ease }}
-          className="relative z-30 -mt-[2vw] flex flex-nowrap items-end justify-between gap-x-6 pb-10 lg:pb-16"
+          className="relative z-30 -mt-[2vw] flex flex-col gap-3 pb-10 lg:flex-row lg:flex-nowrap lg:items-end lg:justify-between lg:gap-x-6 lg:pb-16"
         >
-          <h1 className="whitespace-nowrap font-display uppercase leading-[0.86] tracking-[-0.025em] text-ink text-[clamp(40px,9.5vw,140px)]">
+          <h1 className="whitespace-nowrap font-display uppercase leading-[0.86] tracking-[-0.025em] text-ink text-[clamp(36px,9.5vw,140px)]">
             I AM
             <br />
             JASHANVEER
           </h1>
-          <h2 className="whitespace-nowrap font-display uppercase leading-[0.95] tracking-tight text-right text-ink text-[clamp(16px,3vw,52px)] mb-[0.4vw]">
+          <h2 className="whitespace-nowrap font-display uppercase leading-[0.95] tracking-tight text-ink text-[clamp(20px,3vw,52px)] lg:text-right lg:mb-[0.4vw]">
             SOFTWARE
             <br />
             ENGINEER
