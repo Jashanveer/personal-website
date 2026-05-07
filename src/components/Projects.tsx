@@ -10,7 +10,7 @@ import { projects, type Project } from "@/lib/projects";
 
 const STATUS_COPY: Record<Project["status"], string> = {
   live: "● Live",
-  soon: "● Coming to App Store",
+  soon: "● Beta testing",
   shipped: "● Shipped",
   current: "● Currently building",
 };

@@ -58,6 +58,7 @@ export const projects: Project[] = [
       "Spring Boot backend for cross-device sync",
     ],
     tech: ["Swift", "SwiftData", "HealthKit", "FoundationModels", "Spring Boot"],
+    href: "https://testflight.apple.com/join/vPHh4czG",
     github: "https://github.com/Jashanveer/rung-ios",
     status: "soon",
     accent: "#C96442",
