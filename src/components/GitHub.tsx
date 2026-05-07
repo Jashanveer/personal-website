@@ -1,58 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import GitHubIcon from "./icons/GitHubIcon";
+import GitHubStats from "./GitHubStats";
 import GitHubHeatmap from "./GitHubHeatmap";
-
-type Repo = {
-  name: string;
-  description: string;
-  language: string;
-  href: string;
-};
-
-/** Hand-picked from github.com/Jashanveer — the active, portfolio-worthy ones. */
-const repos: Repo[] = [
-  {
-    name: "earthlens",
-    description: "Native macOS source for the Earth Lens menu-bar app.",
-    language: "Swift",
-    href: "https://github.com/Jashanveer/earthlens",
-  },
-  {
-    name: "rung-ios",
-    description: "iOS + iPadOS client for the Rung habit tracker.",
-    language: "Swift",
-    href: "https://github.com/Jashanveer/rung-ios",
-  },
-  {
-    name: "rung-macos",
-    description: "macOS client for Rung — same SwiftData store as iOS.",
-    language: "Swift",
-    href: "https://github.com/Jashanveer/rung-macos",
-  },
-  {
-    name: "rung-backend",
-    description: "Spring Boot service that syncs Rung data across devices.",
-    language: "Java",
-    href: "https://github.com/Jashanveer/rung-backend",
-  },
-  {
-    name: "earthlens-website",
-    description: "Marketing site for Earth Lens (live at earth-lens.netlify.app).",
-    language: "JavaScript",
-    href: "https://github.com/Jashanveer/earthlens-website",
-  },
-  {
-    name: "Chat-app",
-    description: "Real-time chat over Socket.IO with lightweight rooms.",
-    language: "JavaScript",
-    href: "https://github.com/Jashanveer/Chat-app",
-  },
-];
 
 export default function GitHubSection() {
   return (
@@ -60,9 +13,8 @@ export default function GitHubSection() {
       <div className="mx-auto max-w-[1500px]">
         <SectionHeading eyebrow="Open-source" title="On GitHub" />
 
-        {/* Contribution heatmap — last year of activity, served as SVG by
-            ghchart.rshah.org. Wrapped in a glass card so it sits on the
-            ambient gradient instead of a hard white block. */}
+        {/* Public-profile stats pulled from GitHub's GraphQL API via
+            /api/github-stats, plus a synthetic-data activity heatmap. */}
         <motion.div
           initial={{ opacity: 0, y: 60, scale: 0.96, filter: "blur(10px)" }}
           whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
@@ -72,7 +24,7 @@ export default function GitHubSection() {
         >
           <div className="flex flex-col gap-2 pb-6">
             <span className="font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-ink/55">
-              Last year of contributions
+              By the numbers
             </span>
             <a
               href="https://github.com/Jashanveer"
@@ -85,49 +37,17 @@ export default function GitHubSection() {
               <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </a>
           </div>
-          <GitHubHeatmap username="Jashanveer" />
-        </motion.div>
+          <GitHubStats username="Jashanveer" />
 
-        {/* Featured repos */}
-        <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-          {repos.map((r, i) => (
-            <motion.div
-              key={r.name}
-              initial={{ opacity: 0, y: 40, scale: 0.96, filter: "blur(8px)" }}
-              whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-              viewport={{ once: true, margin: "-15%" }}
-              transition={{
-                duration: 0.9,
-                delay: i * 0.07,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-            >
-              <Link
-                href={r.href}
-                target="_blank"
-                rel="noreferrer"
-                className="group flex flex-col gap-2 rounded-2xl border border-white/35 bg-white/25 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] backdrop-blur-xl backdrop-saturate-150 transition-all duration-400 ease-out hover:-translate-y-1 hover:border-white/60 hover:bg-white/40 dark:border-white/10 dark:bg-white/[0.03] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] dark:hover:bg-white/[0.06]"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 font-sans text-[13px] font-semibold text-ink">
-                    <GitHubIcon size={14} className="size-3.5" />
-                    {r.name}
-                  </span>
-                  <ArrowUpRight
-                    className="size-4 text-ink/45 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ink"
-                    aria-hidden
-                  />
-                </div>
-                <p className="text-[13px] leading-relaxed text-ink/70">
-                  {r.description}
-                </p>
-                <span className="mt-auto pt-2 text-[11px] font-medium uppercase tracking-[0.15em] text-ink/45">
-                  · {r.language}
-                </span>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
+          <div className="mt-12 flex flex-col gap-3 border-t border-ink/10 pt-8 dark:border-white/10">
+            <span className="font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-ink/55">
+              Activity in the last 12 months
+            </span>
+          </div>
+          <div className="mt-4">
+            <GitHubHeatmap seed="Jashanveer" />
+          </div>
+        </motion.div>
       </div>
     </section>
   );
