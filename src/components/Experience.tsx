@@ -12,34 +12,34 @@ type Row = {
 
 const rows: Row[] = [
   {
-    years: "2026 – Now",
+    years: "Feb 2026 - Present",
     role: "Software Developer",
     org: "onAir Tech Corporation · Remote",
-    tags: ["React", "JavaScript", "REST APIs", "AWS", "AI/ML collab"],
+    tags: ["React", "JavaScript", "WordPress", "Content", "Admin workflows"],
   },
   {
-    years: "2024 – 2025",
-    role: "M.S. Computer Science",
-    org: "George Mason University · GPA 3.7",
-    tags: ["Algorithms", "OS", "Compilers", "Distributed", "Data Mining"],
+    years: "Apr 2023 - Dec 2023",
+    role: "Senior Software Engineer L1",
+    org: "Gemini Solutions Pvt. Ltd. · PIMCO",
+    tags: ["Java", "Spring", "Oracle", "SQL", "Code reviews"],
   },
   {
-    years: "2023",
+    years: "Apr 2022 - Mar 2023",
     role: "Software Engineer L2",
-    org: "Gemini Solutions · PIMCO Consultant",
-    tags: ["Java", "Spring", "Oracle", "Legacy modernization", "30+ PRs/mo"],
+    org: "Gemini Solutions Pvt. Ltd. · Clovek Wealth",
+    tags: ["REST APIs", "SOAP", "Angular", "SQL", "40% faster"],
   },
   {
-    years: "2022 – 2023",
+    years: "Apr 2021 - Mar 2022",
     role: "Software Engineer L1",
-    org: "Gemini Solutions · Clovek Wealth",
-    tags: ["Angular", "REST/SOAP", "SQL", "+40% response time"],
+    org: "Gemini Solutions Pvt. Ltd. · Contripoint",
+    tags: ["Spring Boot", "Angular", "Python", "SQL", "15+ tickets"],
   },
   {
-    years: "2021 – 2022",
+    years: "Apr 2020 - Mar 2021",
     role: "Technical Trainee",
-    org: "Gemini Solutions · Built Contripoint + Cyber-Simulation",
-    tags: ["Python", "Spring Boot", "$23K saved/yr"],
+    org: "Gemini Solutions Pvt. Ltd.",
+    tags: ["Spring Boot", "REST APIs", "Angular", "SQL", "Git"],
   },
 ];
 

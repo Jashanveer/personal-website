@@ -1,6 +1,6 @@
 # jashanveer.com
 
-Personal portfolio for Jashanveer Singh — software engineer building for the web and Apple platforms. Currently @ onAir Tech, shipping [Earth Lens](https://earth-lens.netlify.app/) and Rung on the side.
+Personal portfolio for Jashanveer Singh, a Java backend and full-stack engineer. Currently at onAir Tech, shipping [Earth Lens](https://earth-lens.netlify.app/) and Rung Backend on the side.
 
 Built with **Next.js 16** (App Router) + **React 19** + **Tailwind CSS v4** + **Framer Motion**. Lenis for smooth scroll, custom Liquid-Glass surfaces, mouse-tracking ambient gradient, and a live GitHub contributions heatmap.
 

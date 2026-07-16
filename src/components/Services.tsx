@@ -6,33 +6,33 @@ import SectionHeading from "./SectionHeading";
 const services = [
   {
     n: "01",
-    title: "Web Apps",
-    body: "Modern React + Next.js stacks. TypeScript, Tailwind, server components, and the boring-good practices that keep teams shipping.",
-    tools: ["React", "Next.js", "TypeScript"],
+    title: "Java Backend",
+    body: "Spring Boot services with Spring Security, JPA/Hibernate, REST and SOAP integrations, and production-minded error handling.",
+    tools: ["Java", "Spring Boot", "Spring Security"],
   },
   {
     n: "02",
-    title: "Native Apple",
-    body: "iOS and macOS apps that feel native because they are. SwiftUI, SwiftData, HealthKit, FoundationModels, Liquid Glass.",
-    tools: ["Swift", "SwiftUI", "SwiftData"],
+    title: "Data & Realtime",
+    body: "Relational data design and performance work across PostgreSQL, Oracle, MySQL, Redis, Flyway, and server-sent events.",
+    tools: ["PostgreSQL", "Oracle", "Redis"],
   },
   {
     n: "03",
-    title: "Backend Systems",
-    body: "Spring Boot APIs, Postgres at scale, legacy modernization without breaking SLAs. Reviewed 30+ PRs/month at Gemini.",
-    tools: ["Spring Boot", "PostgreSQL", "Hibernate"],
+    title: "Full Stack",
+    body: "React and JavaScript features, Angular modules, and WordPress-backed workflows that connect resilient services to useful interfaces.",
+    tools: ["React", "JavaScript", "Angular"],
   },
   {
     n: "04",
     title: "Cloud Native",
-    body: "AWS deployments, Docker + Kubernetes, CI/CD pipelines that don't break on Friday. Performance monitoring and scaling without surprises.",
-    tools: ["AWS", "Docker", "Kubernetes", "CI/CD"],
+    body: "Dockerized applications and dependable deployment pipelines using AWS, Jenkins, GitHub Actions, Kubernetes, and CI/CD.",
+    tools: ["AWS", "Docker", "Kubernetes", "Jenkins"],
   },
   {
     n: "05",
     title: "AI Integrations",
-    body: "Wiring REST + LLM endpoints into product surfaces. On-device with Apple's FoundationModels, server-side with the usual suspects.",
-    tools: ["REST", "LLM APIs", "On-device AI"],
+    body: "Typed Anthropic and OpenAI integrations with Pydantic validation, provider selection, prompt caching, and cost telemetry.",
+    tools: ["Anthropic API", "OpenAI", "Pydantic"],
   },
 ];
 

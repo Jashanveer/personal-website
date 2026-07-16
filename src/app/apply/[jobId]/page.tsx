@@ -86,10 +86,11 @@ export default async function ApplicationPage({
           </p>
 
           <p className="mt-6 max-w-3xl text-base leading-relaxed text-ink/75 lg:text-lg">
-            I&apos;m Jashanveer Singh, a software engineer focused on backend
-            systems and Apple platforms. Currently shipping at onAir Tech and
-            building Rung and EarthLens on the side. The resume below has the
-            specifics — happy to walk through any of them in a quick call.
+            I&apos;m Jashanveer Singh, a Java backend and full-stack engineer.
+            I build Spring Boot systems, APIs, data layers, and product
+            interfaces. I&apos;m currently shipping at onAir Tech and building
+            Rung Backend and Earth Lens on the side. The resume below has the
+            specifics. I&apos;m happy to walk through any of them in a quick call.
           </p>
 
           <div className="mt-12 flex flex-wrap gap-3">
@@ -107,7 +108,7 @@ export default async function ApplicationPage({
               See full portfolio
             </Link>
             <a
-              href="mailto:mailforjashanveer@gmail.com"
+              href="mailto:jashan@jashanveer.com"
               className="inline-flex items-center gap-2 rounded-full border border-ink/30 px-7 py-3.5 font-display text-sm uppercase tracking-wider text-ink transition hover:border-ink hover:bg-ink hover:text-cream"
             >
               Email me

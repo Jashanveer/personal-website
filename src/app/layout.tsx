@@ -25,14 +25,14 @@ const archivoBlack = Archivo_Black({
 });
 
 export const metadata: Metadata = {
-  title: "Jashanveer Singh — Software Engineer",
+  title: "Jashanveer Singh | Java Backend / Full-Stack Engineer",
   description:
-    "Software engineer building for the web and native on Apple platforms. Currently @ onAir Tech, shipping Rung and Earth Lens on the side.",
+    "Java backend and full-stack engineer specializing in Spring Boot, REST APIs, PostgreSQL, Redis, and React. Currently at onAir Tech.",
   metadataBase: new URL("https://jashanveer.com"),
   openGraph: {
-    title: "Jashanveer Singh — Software Engineer",
+    title: "Jashanveer Singh | Java Backend / Full-Stack Engineer",
     description:
-      "Building for the web, native on Apple platforms. Earth Lens · Rung · onAir Tech.",
+      "Java backend and full-stack engineer. Spring Boot, PostgreSQL, Redis, React, Rung Backend, and onAir Tech.",
     type: "website",
   },
 };
