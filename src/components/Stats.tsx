@@ -15,9 +15,9 @@ type Stat = {
 
 const stats: Stat[] = [
   { to: 4, suffix: "+", label: "Years\nshipping" },
-  { to: 30, suffix: "+", label: "PRs reviewed\nper month" },
+  { to: 27, label: "REST controllers\nin Rung Backend" },
+  { to: 40, suffix: "%", label: "Faster response\ntime delivered" },
   { to: 23, prefix: "$", suffix: "K", label: "Saved with\nin-house tools" },
-  { to: 1, label: "Patent\nfiled" },
 ];
 
 export default function Stats() {

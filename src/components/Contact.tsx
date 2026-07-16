@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowUpRight, Send } from "lucide-react";
 
-const RECIPIENT = "mailforjashanveer@gmail.com";
+const RECIPIENT = "jashan@jashanveer.com";
 
 export default function Contact() {
   return (

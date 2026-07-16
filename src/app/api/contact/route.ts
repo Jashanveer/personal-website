@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
  * Required env vars (set in .env.local locally; in Vercel project settings
  * for production):
  *   RESEND_API_KEY     — get one at https://resend.com/api-keys
- *   CONTACT_TO_EMAIL   — your inbox; defaults to mailforjashanveer@gmail.com
+ *   CONTACT_TO_EMAIL   — your inbox; defaults to jashan@jashanveer.com
  *
  * Defaults to Resend's `onboarding@resend.dev` test sender so you can ship
  * without verifying a domain. Once jashanveer.com is verified at Resend,
@@ -16,7 +16,7 @@ import { NextResponse } from "next/server";
  */
 
 const FROM_EMAIL = "Portfolio <onboarding@resend.dev>";
-const DEFAULT_TO = "mailforjashanveer@gmail.com";
+const DEFAULT_TO = "jashan@jashanveer.com";
 
 export async function POST(req: Request) {
   let body: { name?: string; email?: string; message?: string };

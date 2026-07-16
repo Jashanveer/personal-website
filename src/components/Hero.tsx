@@ -156,10 +156,11 @@ export default function Hero() {
                 <span className="block pb-1 text-[11px] font-medium uppercase tracking-[0.18em] text-ink/45">
                   here&apos;s what I do
                 </span>
-                Specialized in <span className="font-semibold">Web Apps</span>,{" "}
-                <span className="font-semibold">iOS &amp; macOS</span>,{" "}
-                <span className="font-semibold">Backend</span>, and{" "}
-                <span className="font-semibold">Cloud-native</span> systems.
+                Java backend and full-stack engineer building with{" "}
+                <span className="font-semibold">Spring Boot</span>,{" "}
+                <span className="font-semibold">REST APIs</span>,{" "}
+                <span className="font-semibold">PostgreSQL</span>, and{" "}
+                <span className="font-semibold">React</span>.
                 <br />
                 <span className="text-ink/60">Currently @ onAir Tech.</span>
               </p>
@@ -181,9 +182,9 @@ export default function Hero() {
             JASHANVEER
           </h1>
           <h2 className="whitespace-nowrap font-display uppercase leading-[0.95] tracking-tight text-ink text-[clamp(20px,3vw,52px)] lg:text-right lg:mb-[0.4vw]">
-            SOFTWARE
+            JAVA BACKEND /
             <br />
-            ENGINEER
+            FULL-STACK ENGINEER
           </h2>
         </motion.div>
 
@@ -196,10 +197,11 @@ export default function Hero() {
         >
           <AvailabilityPill />
           <p className="max-w-md text-[14px] leading-relaxed text-ink/80">
-            Specialized in <span className="font-semibold">Web Apps</span>,{" "}
-            <span className="font-semibold">iOS &amp; macOS</span>,{" "}
-            <span className="font-semibold">Backend</span>, and{" "}
-            <span className="font-semibold">Cloud-native</span> systems. Currently @ onAir Tech.
+            Java backend and full-stack engineer building with{" "}
+            <span className="font-semibold">Spring Boot</span>,{" "}
+            <span className="font-semibold">REST APIs</span>,{" "}
+            <span className="font-semibold">PostgreSQL</span>, and{" "}
+            <span className="font-semibold">React</span>. Currently @ onAir Tech.
           </p>
         </motion.div>
       </motion.div>
