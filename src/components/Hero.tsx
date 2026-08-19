@@ -272,13 +272,13 @@ export default function Hero() {
 
         {/* BOTTOM ROW — "I AM JASHANVEER" + "SOFTWARE ENGINEER".
             Stacks vertically on mobile so the headline doesn't overflow. */}
-        <div className="relative z-30 -mt-[2vw] flex flex-col gap-3 pb-10 lg:flex-row lg:flex-nowrap lg:items-end lg:justify-between lg:gap-x-6 lg:pb-16">
+        <div className="headline-row relative z-30 -mt-[2vw] flex flex-col gap-3 pb-10 lg:flex-row lg:flex-nowrap lg:items-end lg:justify-between lg:gap-x-6 lg:pb-16">
           {/* Skew wrapper leans the headline with scroll velocity; the GSAP
               SplitText entrance above animates the chars inside. */}
           <motion.div style={{ skewX: prefersReducedMotion ? 0 : skewX }}>
             <h1
               ref={h1Ref}
-              className="whitespace-nowrap font-display uppercase leading-[0.86] tracking-[-0.025em] text-ink text-[clamp(36px,9.5vw,140px)]"
+              className="headline-name whitespace-nowrap font-display uppercase leading-[0.86] tracking-[-0.025em] text-ink"
             >
               I AM
               <br />
@@ -289,7 +289,7 @@ export default function Hero() {
             initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: introDelay + 0.75, ease: EASE }}
-            className="whitespace-nowrap font-display uppercase leading-[0.95] tracking-tight text-ink text-[clamp(20px,3vw,52px)] lg:text-right lg:mb-[0.4vw]"
+            className="headline-role whitespace-nowrap font-display uppercase leading-[0.95] tracking-tight text-ink lg:text-right lg:mb-[0.4vw]"
           >
             JAVA BACKEND /
             <br />

@@ -61,7 +61,7 @@ Loaded via `next/font/google` in [src/app/layout.tsx](src/app/layout.tsx): **Int
 
 - Section components are client components only when they need state/effects/animation (`"use client"`); otherwise keep them server components.
 - Compose pages in `src/app/page.tsx`; do **not** add layout chrome to individual section components — Nav and ThemeSlider are mounted once at page root.
-- The hero (`src/components/Hero.tsx`) hard-codes a font-size cap of `clamp(40px,9.5vw,140px)` for "JASHANVEER" so it fits the container at all widths — if you change the headline text, recompute the cap.
+- The hero's bottom row ("I AM / JASHANVEER" + "JAVA BACKEND / FULL-STACK ENGINEER") sizes both headlines from one shared row budget via the `.headline-row` / `.headline-name` / `.headline-role` rules in [src/app/globals.css](src/app/globals.css). Both lines are Archivo Black on a single nowrap line, so each line's width is a fixed multiple of its font size; the divisors in that block (`7.4` for "JASHANVEER", `12.7` for "FULL-STACK ENGINEER") are those measured em-widths. **If you change either headline's text, re-measure and update the divisors**, or the pair will overflow and get clipped by the section's `overflow-hidden`. The `0.68` factor is the name's share of the row at `lg` and up — the role line takes whatever is left.
 - `.dev-screenshots/` is gitignored and used for QA evidence; don't commit screenshots there.
 
 ## Repo notes

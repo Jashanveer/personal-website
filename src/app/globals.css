@@ -97,15 +97,28 @@ html.theme-wipe::view-transition-new(root) {
 }
 
 html.theme-wipe::view-transition-new(root) {
-  animation: theme-wipe-in 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Slow, deliberate bloom rather than a snap. The curve is deliberately close
+     to linear: ~4% along at 100ms (so the click still feels answered), 56% at
+     the halfway point, and it eases only into the final corners. A circle's
+     area grows as r^2, so a near-linear radius already reads as decelerating —
+     a strong ease-out on top of that spends most of the runtime invisible. */
+  animation: theme-wipe-in 1.3s cubic-bezier(0.25, 0, 0.63, 1) both;
 }
 
 @keyframes theme-wipe-in {
   from {
-    clip-path: circle(0% at 50% calc(100vh - 56px));
+    clip-path: circle(0px at 50% calc(100vh - 56px));
   }
   to {
-    clip-path: circle(150% at 50% calc(100vh - 56px));
+    /* Exact reach: the farthest pixel from the slider is a top corner, at
+       hypot(50vw, 100vh - 56px) — correct at every aspect ratio. The old
+       circle(150%) resolved against the viewport diagonal, which is ~1.6x
+       further than needed on a laptop, so a third of the runtime was spent
+       growing past the edge of the screen where nobody can see it. That is
+       what made the wipe feel like it ended early. 1.01 is the anti-aliasing
+       margin; the circle now reaches the last corner at ~94% of the runtime
+       instead of ~62%. */
+    clip-path: circle(calc(hypot(50vw, 100vh - 56px) * 1.01) at 50% calc(100vh - 56px));
   }
 }
 
@@ -114,4 +127,42 @@ html.theme-wipe::view-transition-new(root) {
 html.theme-wipe,
 html.theme-wipe body {
   transition: none;
+}
+
+/* ── Bottom-row headline fit ──────────────────────────────────────────────
+   "I AM / JASHANVEER" and "JAVA BACKEND / FULL-STACK ENGINEER" are both
+   Archivo Black set on nowrap single lines, so each line's rendered width is
+   a fixed multiple of its font size. Measured with the real tracking:
+     "JASHANVEER"          ~7.36em   (7.4 used, small safety pad)
+     "FULL-STACK ENGINEER" ~12.60em  (12.7 used)
+   The previous fixed pair (9.5vw name / 3vw role) needed 1701px of row at a
+   1710px viewport but only had 1520px, so the role line was clipped by the
+   section's overflow-hidden at every desktop width. Deriving BOTH sizes from
+   one shared row budget makes overflow arithmetically impossible.
+   cqw, not vw, so container padding and any classic scrollbar are excluded. */
+.headline-row {
+  container-type: inline-size;
+  /* stacked (mobile): each line owns the full row */
+  --fit-budget: calc(100cqw * 0.97);
+  --name-size: min(140px, calc(var(--fit-budget) / 7.4));
+  --role-size: min(40px, calc(var(--fit-budget) / 12.7));
+}
+
+@media (min-width: 1024px) {
+  .headline-row {
+    /* side by side: the two share the row, minus the gap-x-6 between them.
+       0.68 is the name's share — raise it for a bigger name and a smaller
+       role line, lower it for the reverse. The role line takes the rest. */
+    --fit-budget: calc((100cqw - 1.5rem) * 0.97);
+    --name-size: min(140px, calc(var(--fit-budget) * 0.68 / 7.4));
+    --role-size: min(52px, calc((var(--fit-budget) - 7.4 * var(--name-size)) / 12.7));
+  }
+}
+
+.headline-name {
+  font-size: var(--name-size);
+}
+
+.headline-role {
+  font-size: var(--role-size);
 }
