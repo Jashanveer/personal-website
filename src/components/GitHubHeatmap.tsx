@@ -32,7 +32,8 @@ export default function GitHubHeatmap({ seed }: { seed: string }) {
   // per-cell date key).
   const [today, setToday] = useState<Date | null>(null);
   useEffect(() => {
-    setToday(new Date());
+    const frame = window.requestAnimationFrame(() => setToday(new Date()));
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   const cardRef = useRef<HTMLDivElement>(null);

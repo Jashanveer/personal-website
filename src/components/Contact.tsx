@@ -1,36 +1,82 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { ArrowUpRight, Send } from "lucide-react";
+import { EASE } from "@/lib/motion";
+import Magnetic from "./Magnetic";
 
 const RECIPIENT = "jashan@jashanveer.com";
 
 export default function Contact() {
+  const prefersReducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Gentle drift: the headline settles its last 40px into place as the
+  // section scrolls up into view (static under reduced motion).
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "start start"],
+  });
+  const headingY = useTransform(scrollYProgress, [0, 1], [40, 0]);
+
   return (
     <section
+      ref={sectionRef}
       id="contact"
       className="relative w-full overflow-hidden px-6 pt-24 pb-12 lg:px-10 lg:pt-36"
     >
       <div className="mx-auto max-w-[1500px]">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={prefersReducedMotion ? false : { opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.8, ease: EASE }}
           className="flex flex-col gap-8"
         >
           <span className="font-sans text-[12px] font-medium uppercase tracking-[0.2em] text-ink/55">
             Let&apos;s talk
           </span>
 
-          <h2 className="font-serif italic leading-[0.92] text-ink text-[clamp(56px,11vw,200px)]">
-            Got something
-            <br />
-            <span className="font-display not-italic uppercase tracking-[-0.025em] text-[clamp(56px,11vw,200px)]">
-              to build?
+          {/* Each visual line rises from behind its own overflow mask. The
+              wrappers trade pb/-mb so the tight leading doesn't clip the
+              italic descenders of "g"/"y". */}
+          <motion.h2
+            style={prefersReducedMotion ? undefined : { y: headingY }}
+            className="font-serif italic leading-[0.92] text-ink text-[clamp(56px,11vw,200px)]"
+          >
+            <span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
+              <motion.span
+                className="inline-block"
+                initial={
+                  prefersReducedMotion ? false : { y: "110%", opacity: 0.001 }
+                }
+                whileInView={{ y: "0%", opacity: 1 }}
+                viewport={{ once: true, margin: "-15%" }}
+                transition={{ duration: 1.1, ease: EASE }}
+              >
+                Got something
+              </motion.span>
             </span>
-          </h2>
+            <span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
+              <motion.span
+                className="inline-block font-display not-italic uppercase tracking-[-0.025em] text-[clamp(56px,11vw,200px)]"
+                initial={
+                  prefersReducedMotion ? false : { y: "110%", opacity: 0.001 }
+                }
+                whileInView={{ y: "0%", opacity: 1 }}
+                viewport={{ once: true, margin: "-15%" }}
+                transition={{ duration: 1.1, delay: 0.12, ease: EASE }}
+              >
+                to build?
+              </motion.span>
+            </span>
+          </motion.h2>
 
           <MagneticEmail />
 
@@ -68,44 +114,23 @@ export default function Contact() {
   );
 }
 
+/** Email link riding the shared magnetic-hover wrapper. */
 function MagneticEmail() {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 220, damping: 18, mass: 0.5 });
-  const sy = useSpring(y, { stiffness: 220, damping: 18, mass: 0.5 });
-
-  const onMove = (e: React.PointerEvent<HTMLAnchorElement>) => {
-    const el = ref.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const dx = e.clientX - (rect.left + rect.width / 2);
-    const dy = e.clientY - (rect.top + rect.height / 2);
-    x.set(dx * 0.18);
-    y.set(dy * 0.25);
-  };
-  const onLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
   return (
-    <motion.a
-      ref={ref}
-      href={`mailto:${RECIPIENT}`}
-      onPointerMove={onMove}
-      onPointerLeave={onLeave}
-      style={{ x: sx, y: sy }}
-      className="group inline-flex w-fit items-center gap-3 text-ink"
-    >
-      <span className="font-sans text-[clamp(20px,2.6vw,32px)] font-medium underline decoration-ink/30 decoration-[1.5px] underline-offset-[6px] transition-colors group-hover:decoration-ink">
-        {RECIPIENT}
-      </span>
-      <ArrowUpRight
-        className="size-7 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-        aria-hidden
-      />
-    </motion.a>
+    <Magnetic strength={0.18} strengthY={0.25} className="inline-flex w-fit">
+      <a
+        href={`mailto:${RECIPIENT}`}
+        className="group inline-flex w-fit items-center gap-3 text-ink"
+      >
+        <span className="font-sans text-[clamp(20px,2.6vw,32px)] font-medium underline decoration-ink/30 decoration-[1.5px] underline-offset-[6px] transition-colors group-hover:decoration-ink">
+          {RECIPIENT}
+        </span>
+        <ArrowUpRight
+          className="size-7 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+          aria-hidden
+        />
+      </a>
+    </Magnetic>
   );
 }
 

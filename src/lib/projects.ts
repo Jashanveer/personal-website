@@ -17,10 +17,17 @@ export type Project = {
    *  the gradient mockup. Drop files at e.g. public/projects/earth-lens.png
    *  and uncomment the matching line below. */
   screenshot?: string;
+  /** Optional path under /public to a short, silent, looping product clip
+   *  (e.g. public/projects/rung.mp4). Takes priority over `screenshot`, which
+   *  is reused as the poster frame. This is the drop-in slot for the 5-10s
+   *  highlight loops. */
+  video?: string;
   /** Optional URL to embed as a live iframe preview inside the card mockup.
    *  Shrinks the live site into the card via CSS scale. Falls back to mockup
    *  if the site blocks iframing. */
   iframe?: string;
+  /** App icon used by the compact project launcher. */
+  icon: string;
 };
 
 export const projects: Project[] = [
@@ -44,6 +51,8 @@ export const projects: Project[] = [
     bgTo: "#8ea4b8",
     platform: "macos",
     screenshot: "/projects/earth-lens.webp",
+    video: "/projects/earth-lens.mp4",
+    icon: "/projects/earth-lens-icon.png",
   },
   {
     id: "rung",
@@ -58,13 +67,31 @@ export const projects: Project[] = [
       "Testcontainers, JaCoCo gates, and Trivy CI scanning",
     ],
     tech: ["Java 17", "Spring Boot", "PostgreSQL", "Redis", "SSE"],
-    href: "https://testflight.apple.com/join/vPHh4czG",
+    href: "https://rung.club/",
     github: "https://github.com/Jashanveer/rung-ios",
     status: "soon",
     accent: "#C96442",
     bgFrom: "#f5dcc5",
     bgTo: "#d8b896",
     platform: "cross",
-    // screenshot: "/projects/rung.png", // drop file then uncomment
+    screenshot: "/projects/rung.jpg",
+    video: "/projects/rung-complete.mp4",
+    icon: "/projects/rung-icon.png",
+  },
+  {
+    id: "roledesk",
+    name: "RoleDesk",
+    tagline: "Move the search forward.",
+    description:
+      "A local macOS job-search pipeline that keeps every consequential decision yours.",
+    highlights: [],
+    tech: ["macOS", "SwiftUI", "Local AI"],
+    href: "https://getroledesk.com/",
+    status: "current",
+    accent: "#C43D1B",
+    bgFrom: "#f6e3da",
+    bgTo: "#c43d1b",
+    platform: "macos",
+    icon: "https://getroledesk.com/assets/roledesk-app-icon.png",
   },
 ];

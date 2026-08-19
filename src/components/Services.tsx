@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { EASE } from "@/lib/motion";
 import SectionHeading from "./SectionHeading";
 
 const services = [
@@ -48,14 +49,42 @@ export default function Services() {
               key={s.n}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ y: -8 }}
               viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 0.6, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] }}
-              className="relative border-t border-ink/15 pt-6"
+              transition={{ duration: 0.6, delay: i * 0.06, ease: EASE }}
+              onPointerMove={(e) => {
+                // Cursor spotlight: write pointer coords as CSS vars (mouse only).
+                if (e.pointerType !== "mouse") return;
+                const rect = e.currentTarget.getBoundingClientRect();
+                e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+                e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
+              }}
+              className="group relative min-h-[260px] overflow-hidden rounded-3xl border border-ink/10 bg-cream/20 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] backdrop-blur-sm"
             >
-              <span className="absolute -top-1 right-0 font-sans text-[13px] font-light text-ink/30">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 motion-reduce:transition-none"
+                style={{
+                  background:
+                    "radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklab, var(--color-ink) 7%, transparent), transparent 70%)",
+                }}
+              />
+              <motion.div
+                aria-hidden
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true, margin: "-10%" }}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.18 + i * 0.07,
+                  ease: EASE,
+                }}
+                className="absolute left-5 right-5 top-0 h-px origin-left bg-ink/35"
+              />
+              <span className="absolute right-5 top-5 font-sans text-[13px] font-light text-ink/30">
                 {s.n}
               </span>
-              <h3 className="font-display text-xl uppercase tracking-tight text-ink lg:text-2xl">
+              <h3 className="pr-8 font-display text-xl uppercase tracking-tight text-ink lg:text-2xl">
                 {s.title}
               </h3>
               <p className="mt-3 text-[14px] leading-relaxed text-ink/75">{s.body}</p>

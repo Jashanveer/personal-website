@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import GitHubIcon from "./icons/GitHubIcon";
@@ -38,15 +38,16 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     "group relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/40 bg-white/30 backdrop-blur-2xl backdrop-saturate-150 shadow-[0_20px_60px_-30px_rgba(20,17,14,0.45),inset_0_1px_0_rgba(255,255,255,0.6)] transition-all duration-500 ease-out hover:-translate-y-1.5 hover:bg-white/40 hover:shadow-[0_40px_90px_-30px_rgba(20,17,14,0.55),inset_0_1px_0_rgba(255,255,255,0.7)] dark:border-white/10 dark:bg-white/[0.04] dark:shadow-[0_20px_60px_-30px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.08)] dark:hover:bg-white/[0.06]";
 
   const inner = <ProjectCardInner project={project} />;
+  const reduce = useReducedMotion();
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 80, scale: 0.94, filter: "blur(12px)" }}
-      whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+      initial={reduce ? false : { opacity: 0, y: 60 }}
+      whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-15%" }}
       transition={{
-        duration: 1.1,
-        delay: index * 0.12,
+        duration: 0.9,
+        delay: index * 0.1,
         ease: [0.16, 1, 0.3, 1],
       }}
       className="h-full"
@@ -68,52 +69,28 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 }
 
 function ProjectCardInner({ project }: { project: Project }) {
+  const reduce = useReducedMotion();
   return (
     <>
-      <div
+      <motion.div
+        initial={reduce ? false : { clipPath: "inset(0 0 100% 0)" }}
+        whileInView={reduce ? undefined : { clipPath: "inset(0 0 0% 0)" }}
+        viewport={{ once: true, margin: "-12%" }}
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
         className="relative aspect-[4/3] overflow-hidden"
         style={
-          project.screenshot
+          project.screenshot || project.video
             ? undefined
             : { background: `linear-gradient(135deg, ${project.bgFrom} 0%, ${project.bgTo} 100%)` }
         }
       >
-        {project.screenshot ? (
-          <Image
-            src={project.screenshot}
-            alt={`${project.name} screenshot`}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            quality={90}
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-          />
-        ) : project.iframe ? (
-          <IframePreview src={project.iframe} accent={project.accent} />
-        ) : (
-          <>
-            <div
-              aria-hidden
-              className="absolute inset-0 opacity-[0.07] mix-blend-overlay"
-              style={{
-                backgroundImage:
-                  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
-              }}
-            />
-            <div className="absolute inset-0 dark:brightness-[0.32] dark:saturate-[1.35]">
-              <DeviceMockup
-                platform={project.platform}
-                accent={project.accent}
-                projectId={project.id}
-              />
-            </div>
-          </>
-        )}
+        <ProjectMedia project={project} />
 
         {/* Liquid-glass status badge */}
         <div className="absolute right-4 top-4 z-10 rounded-full border border-white/40 bg-white/50 px-3 py-1 text-[11px] font-medium tracking-tight text-ink shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] backdrop-blur-xl backdrop-saturate-150 dark:border-white/15 dark:bg-white/10 dark:text-ink dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
           {STATUS_COPY[project.status]}
         </div>
-      </div>
+      </motion.div>
 
       <div className="flex flex-1 items-start justify-between gap-6 px-6 py-6 lg:px-8 lg:py-8">
         <div className="flex flex-col gap-2">
@@ -176,6 +153,78 @@ function ProjectCardInner({ project }: { project: Project }) {
             aria-hidden
           />
         ) : null}
+      </div>
+    </>
+  );
+}
+
+/** The card's media surface: a looping product clip if one exists, else a
+ *  real screenshot, else a live iframe, else the abstract device mockup.
+ *  Reduced-motion users get the poster frame instead of an autoplaying loop. */
+function ProjectMedia({ project }: { project: Project }) {
+  const reduce = useReducedMotion();
+
+  if (project.video) {
+    if (reduce && project.screenshot) {
+      return (
+        <Image
+          src={project.screenshot}
+          alt={`${project.name} preview`}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          quality={90}
+          className="object-cover"
+        />
+      );
+    }
+    return (
+      <video
+        className="h-full w-full object-cover"
+        autoPlay={!reduce}
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        poster={project.screenshot}
+      >
+        <source src={project.video} type="video/mp4" />
+      </video>
+    );
+  }
+
+  if (project.screenshot) {
+    return (
+      <Image
+        src={project.screenshot}
+        alt={`${project.name} screenshot`}
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        quality={90}
+        className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+      />
+    );
+  }
+
+  if (project.iframe) {
+    return <IframePreview src={project.iframe} accent={project.accent} />;
+  }
+
+  return (
+    <>
+      <div
+        aria-hidden
+        className="absolute inset-0 opacity-[0.07] mix-blend-overlay"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
+        }}
+      />
+      <div className="absolute inset-0 dark:brightness-[0.32] dark:saturate-[1.35]">
+        <DeviceMockup
+          platform={project.platform}
+          accent={project.accent}
+          projectId={project.id}
+        />
       </div>
     </>
   );
