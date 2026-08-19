@@ -57,7 +57,7 @@ export const projects: Project[] = [
   {
     id: "rung",
     name: "Rung",
-    tagline: "A habit platform backed by Java.",
+    tagline: "Build habits together with a community.",
     description:
       "A habit and mentoring platform with a Java 17 Spring Boot backend for authentication, progress, subscriptions, data portability, and real-time synchronization.",
     highlights: [
